@@ -1,4 +1,4 @@
-name: Build WASM
+﻿name: Build WASM
 
 on: [push, pull_request]
 
@@ -8,17 +8,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Rust
+    - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
         toolchain: nightly
         target: wasm32-unknown-unknown
         override: true
+        components: rust-src, llvm-tools-preview
         
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      
+    - name: Install binaryen
+      run: sudo apt-get install binaryen
+      
     - name: Build
       run: |
-        cargo install wasm-pack
         wasm-pack build --target web --release
+        wasm-opt -O4 pkg/igl_quant_bg.wasm -o pkg/igl_quant_bg.wasm
         
     - name: Upload artifact
       uses: actions/upload-artifact@v3
