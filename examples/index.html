@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IGL-Quant Demo</title>
+    <link rel="icon" href="data:,">
+    <meta charset="utf-8">
+    <style>
+        canvas { border: 1px solid #ccc; margin: 20px; }
+    </style>
+    <script type="module" src="./webgpu-demo.js"></script>
+</head>
+<body>
+    <h1>IGL-Quant Project</h1>
+    <div id="status">Проверка поддержки WebGPU...</div>
+    <canvas id="gpuCanvas" width="800" height="600"></canvas>
+    <button id="checkWebGPU">Проверить WebGPU</button>
+<script>
+document.getElementById('checkWebGPU').addEventListener('click', () => {
+    const gpuInfo = navigator.gpu ? "Поддерживается" : "Не поддерживается";
+    alert(`WebGPU: ${gpuInfo}\nИспользуйте Firefox Nightly или Chrome/Edge 113+`);
+});
+</script>
+</body>
+</html>
