@@ -1,3 +1,6 @@
+﻿mod cpu;
+pub use cpu::physics::*;
+
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]

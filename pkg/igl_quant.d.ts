@@ -1,11 +1,17 @@
 /* tslint:disable */
 /* eslint-disable */
 export function greet(): string;
+export class PhysicsSimulator {
+  free(): void;
+  constructor();
+}
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly __wbg_physicssimulator_free: (a: number, b: number) => void;
+  readonly physicssimulator_new: () => number;
   readonly greet: () => [number, number];
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;

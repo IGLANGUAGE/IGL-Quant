@@ -33,6 +33,31 @@ export function greet() {
     }
 }
 
+const PhysicsSimulatorFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_physicssimulator_free(ptr >>> 0, 1));
+
+export class PhysicsSimulator {
+
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        PhysicsSimulatorFinalization.unregister(this);
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_physicssimulator_free(ptr, 0);
+    }
+    constructor() {
+        const ret = wasm.physicssimulator_new();
+        this.__wbg_ptr = ret >>> 0;
+        PhysicsSimulatorFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+}
+
 async function __wbg_load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
         if (typeof WebAssembly.instantiateStreaming === 'function') {
@@ -76,6 +101,9 @@ function __wbg_get_imports() {
         table.set(offset + 2, true);
         table.set(offset + 3, false);
         ;
+    };
+    imports.wbg.__wbindgen_throw = function(arg0, arg1) {
+        throw new Error(getStringFromWasm0(arg0, arg1));
     };
 
     return imports;
