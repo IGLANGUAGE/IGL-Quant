@@ -1,18 +1,27 @@
 name: Build WASM
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: wasm32-unknown-unknown
-      - run: cargo build --release --target wasm32-unknown-unknown
-      - uses: actions/upload-artifact@v3
-        with:
-          name: wasm-bin
-          path: target/wasm32-unknown-unknown/release/igl_quant.wasm
+    - uses: actions/checkout@v4
+    
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        target: wasm32-unknown-unknown
+        override: true
+        
+    - name: Build
+      run: |
+        cargo install wasm-pack
+        wasm-pack build --target web --release
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: wasm-pkg
+        path: pkg/
