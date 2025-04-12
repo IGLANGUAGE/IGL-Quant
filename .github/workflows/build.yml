@@ -1,4 +1,7 @@
 name: Build WASM
+on: [push, pull_request]
+
+name: Build WASM
 
 on: [push, pull_request]
 
@@ -21,6 +24,9 @@ jobs:
 
       - name: Build
         run: wasm-pack build --target web --release
+
+      - name: Verify files
+        run: ls -R pkg/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
